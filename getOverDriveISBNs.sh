@@ -8,7 +8,7 @@ HOST=$(cat /etc/hostname)
 
 if [ "$HOST" == "hobvmplapt23.pubnet.metro" ]
 	then
-		MAILTO="james.staub@nashville.gov RSelhorst@midwesttapes.com"
+		MAILTO="james.staub@nashville.gov RSelhorst@midwesttapes.com JNowak@midwesttapes.com"
 fi
 
 /opt/rh/php55/root/usr/bin/php getOverDriveISBNs.php;
