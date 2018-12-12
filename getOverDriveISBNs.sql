@@ -7,12 +7,16 @@
 	left join econtent.overdrive_api_products b on i.productId = b.id
 	left join econtent.overdrive_api_product_availability a on b.id = a.productId
 	left join econtent.overdrive_api_product_formats f on b.id = f.productId
-	where i.type in ('ISBN','8')
-	and f.textId like 'audiobook%'
+	where f.textId like 'audiobook%'
 	-- we use b.deleted instead of a.copiesOwned 'cause we want to provide access and deleted indicates it ain't findable in Pika.
 	-- Let them eat Hoopla if we don't point them to OverDrive, even if there's copies really to be had in OverDrive
 	-- for the record on 2018 09 18 there are 485 titles that are deleted = 1 and copiesOwned > 0
 	and b.deleted != 1
+	and (
+			i.type = 'ISBN'
+		        -- ISBN regexp below stolen from https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html . 2018 12 12 : Only catches 2 more than (^[0-9]{9}[0-9Xx]$|^97[89][0-9]{10}$)
+			or regexp_replace(i.value, '^.+#','') regexp '^(?:ISBN(?:-1[03])?:? )?(?=[0-9Xx]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9Xx]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9Xx]$'
+	)
 	order by ISBN
 ) UNION DISTINCT (
 -- RETRIEVE otherFormatIdentifiers, see https://trello.com/c/UE5A8Xk5
@@ -39,4 +43,3 @@
 )
 order by primaryCreatorName, title, ISBN
 ;
-
