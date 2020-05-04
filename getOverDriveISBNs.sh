@@ -6,12 +6,12 @@
 DATE=`date --date="$(date +%Y-%m-%d)" "+%Y%m%d"`;
 HOST=$(cat /etc/hostname)
 
-if [ "$HOST" == "hobvmplapt23.pubnet.metro" ]
+if [ "$HOST" == "hobvmplap07.pubnet.metro" ]
 	then
-		MAILTO="james.staub@nashville.gov RSelhorst@midwesttapes.com JNowak@midwesttapes.com"
+		MAILTO="bryan.n.jones@nashville.gov james.staub@nashville.gov RSelhorst@midwesttapes.com JCousino@midwesttapes.com"
 fi
 
-/opt/rh/php55/root/usr/bin/php getOverDriveISBNs.php;
+/bin/php getOverDriveISBNs.php;
 
 echo "Nashville to hoopla: Monthly OverDrive eAudiobook report" \
 	| mail -s "Nashville to hoopla: Monthly OverDrive eAudiobook report $DATE" \
