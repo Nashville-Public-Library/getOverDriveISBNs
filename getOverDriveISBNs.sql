@@ -3,10 +3,10 @@
 		regexp_replace(i.value, '^.+#','') as ISBN
 		, b.title
 		, b.primaryCreatorName
-	from econtent.overdrive_api_product_identifiers i
-	left join econtent.overdrive_api_products b on i.productId = b.id
-	left join econtent.overdrive_api_product_availability a on b.id = a.productId
-	left join econtent.overdrive_api_product_formats f on b.id = f.productId
+	from aspen.overdrive_api_product_identifiers i
+	left join aspen.overdrive_api_products b on i.productId = b.id
+	left join aspen.overdrive_api_product_availability a on b.id = a.productId
+	left join aspen.overdrive_api_product_formats f on b.id = f.productId
 	where f.textId like 'audiobook%'
 	-- we use b.deleted instead of a.copiesOwned 'cause we want to provide access and deleted indicates it ain't findable in Pika.
 	-- Let them eat Hoopla if we don't point them to OverDrive, even if there's copies really to be had in OverDrive
@@ -26,14 +26,14 @@
 		json_value(m.rawData, concat('$.otherFormatIdentifiers[', idx, '].value')) as ISBN
 		, b.title
 		, b.primaryCreatorName
-	from econtent.overdrive_api_product_metadata m
+	from aspen.overdrive_api_product_metadata m
 	join (
 		select 0 as idx union
 		select 1 as idx union
 		select 2 as idx union
 		select 3
 	) as indeces
-	left join econtent.overdrive_api_products b on m.productId = b.id
+	left join aspen.overdrive_api_products b on m.productId = b.id
 	where b.deleted != 1
 		and json_value(m.rawData, '$.mediaType') = 'Audiobook'
 		and json_query(m.rawData, concat('$.otherFormatIdentifiers[', idx, ']')) is not null
